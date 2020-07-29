@@ -19,11 +19,11 @@
 
 use std::collections::HashSet;
 use std::convert::From;
-use std:fs::File;
+use std::fs::File;
 // use std:io:Write;
 // use std:fs:OpenOptions;
 // use std::time::{SystemTime, UNIX_EPOCH};
-use log::trace;
+use log;
 extern crate simplelog;
 use simplelog::*;
 
