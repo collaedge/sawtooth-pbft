@@ -75,7 +75,7 @@ impl PbftNode {
 
         CombinedLogger::init(
             vec![
-                WriteLogger::new(LevelFilter::Debug, Config::default(), File::create("bpft.log").unwrap()),
+                WriteLogger::new(LevelFilter::Debug, Config::default(), File::create("/home/ubuntu/bpft.log").unwrap()),
             ]
         ).unwrap();
 
