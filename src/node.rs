@@ -20,8 +20,8 @@
 use std::collections::HashSet;
 use std::convert::From;
 use std::fs::File;
-use std:io:Write;
-use std:fs:OpenOptions;
+use std::io::Write;
+use std::fs::OpenOptions;
 // use std::time::{SystemTime, UNIX_EPOCH};
 use log;
 // extern crate simplelog;
@@ -72,7 +72,7 @@ impl PbftNode {
         let mut n = PbftNode {
             service,
             msg_log: PbftLog::new(config),
-            file_log: OpenOptions::new().write(true).create(true).truncate(true).open("/home/ubuntu/pbft.txt").unwrap();
+            file_log: OpenOptions::new().write(true).create(true).truncate(true).open("/home/ubuntu/pbft.txt").unwrap()
         };
 
         // CombinedLogger::init(
@@ -686,10 +686,10 @@ impl PbftNode {
         let hour  = start.hour().to_string();
         let minute = start.minute().to_string();
         let sec = start.second().to_string();
-        let nano = start.nanosecond().to_string()
+        let nano = start.nanosecond().to_string();
 
-        let line = "start " + &hour + ":" + &minute + ":" + &sec + "." + &nano;
-        self.file_log.write(&line);
+        let line = "start ".to_owned() + &hour + ":" + &minute + ":" + &sec + "." + &nano;
+        self.file_log.write(&line.as_bytes());
         self.file_log.write(b"\n");
 
         Ok(())
@@ -993,10 +993,10 @@ impl PbftNode {
         let hour  = end.hour().to_string();
         let minute = end.minute().to_string();
         let sec = end.second().to_string();
-        let nano = end.nanosecond().to_string()
+        let nano = end.nanosecond().to_string();
 
-        let line = "start " + &hour + ":" + &minute + ":" + &sec + "." + &nano;
-        self.file_log.write(&line);
+        let line = "start ".to_owned() + &hour + ":" + &minute + ":" + &sec + "." + &nano;
+        self.file_log.write(&line.as_bytes());
         self.file_log.write(b"\n");
 
         Ok(())
