@@ -995,7 +995,7 @@ impl PbftNode {
         let sec = end.second().to_string();
         let nano = end.nanosecond().to_string();
 
-        let line = "start ".to_owned() + &hour + ":" + &minute + ":" + &sec + "." + &nano;
+        let line = "end ".to_owned() + &hour + ":" + &minute + ":" + &sec + "." + &nano;
         self.file_log.write(&line.as_bytes());
         self.file_log.write(b"\n");
 
