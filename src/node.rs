@@ -20,9 +20,12 @@
 use std::collections::HashSet;
 use std::convert::From;
 use std:fs::File;
-use std:io:Write;
-use std:fs:OpenOptions;
-use std::time::{SystemTime, UNIX_EPOCH};
+// use std:io:Write;
+// use std:fs:OpenOptions;
+// use std::time::{SystemTime, UNIX_EPOCH};
+use log::trace;
+extern crate simplelog;
+use simplelog::*;
 
 use itertools::Itertools;
 use protobuf::{Message, RepeatedField};
@@ -50,7 +53,7 @@ pub struct PbftNode {
     /// Log of messages this node has received and accepted
     pub msg_log: PbftLog,
 
-    pub mut file_log
+    // pub mut file_log
 }
 
 impl PbftNode {
@@ -67,8 +70,14 @@ impl PbftNode {
         let mut n = PbftNode {
             service,
             msg_log: PbftLog::new(config),
-            file_log = OpenOptions::new().write(true).create(true).truncate(true).open("pbft.txt").unwrap();
+            // file_log = OpenOptions::new().write(true).create(true).truncate(true).open("pbft.txt").unwrap();
         };
+
+        CombinedLogger::init(
+            vec![
+                WriteLogger::new(LevelFilter::Debug, Config::default(), File::create("bpft.log").unwrap()),
+            ]
+        ).unwrap();
 
         // Add chain head to log and update state
         n.msg_log.add_validated_block(chain_head.clone());
@@ -600,11 +609,13 @@ impl PbftNode {
         );
         trace!("Block details: {:?}", block);
 
-        let start = SystemTime::now();
-        let since_the_epoch = start.duration_since(UNIX_EPOCH).unwrap();
-        self.file_log.write("start ");
-        self.file_log.write(since_the_epoch);
-        self.file_log.write(" - ");
+        debug!("propose block");
+
+        // let start = SystemTime::now();
+        // let since_the_epoch = start.duration_since(UNIX_EPOCH).unwrap();
+        // self.file_log.write("start ");
+        // self.file_log.write(since_the_epoch);
+        // self.file_log.write(" - ");
 
         // Only future blocks should be considered since committed blocks are final
         if block.block_num < state.seq_num {
@@ -851,11 +862,12 @@ impl PbftNode {
             _ => false,
         };
 
-        let end = SystemTime::now();
-        let since_the_epoch = end.duration_since(UNIX_EPOCH).unwrap();
-        self.file_log.write("end ");
-        self.file_log.write(since_the_epoch);
-        self.file_log.write("\n");
+        debug!("finalize block");
+        // let end = SystemTime::now();
+        // let since_the_epoch = end.duration_since(UNIX_EPOCH).unwrap();
+        // self.file_log.write("end ");
+        // self.file_log.write(since_the_epoch);
+        // self.file_log.write("\n");
 
         // If there are any blocks in the log at this sequence number other than the one that was
         // just committed, reject them
