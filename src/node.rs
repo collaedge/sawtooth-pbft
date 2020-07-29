@@ -72,7 +72,7 @@ impl PbftNode {
         let mut n = PbftNode {
             service,
             msg_log: PbftLog::new(config),
-            file_log: OpenOptions::new().write(true).create(true).truncate(true).open("/home/ubuntu/pbft.txt").unwrap()
+            file_log: OpenOptions::new().write(true).create(true).truncate(true).open("/tmp/pbft.txt").unwrap()
         };
 
         // CombinedLogger::init(
