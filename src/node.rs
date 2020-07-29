@@ -612,15 +612,7 @@ impl PbftNode {
         trace!("Block details: {:?}", block);
 
         // debug!("propose block");
-        let start: DateTime<Local> = Local::now();
-        let hour  = start.hour().to_string();
-        let minute = start.minute().to_string();
-        let sec = start.second().to_string();
-        let nano = start.nanosecond().to_string()
-
-        let line = "start " + &hour + ":" + &minute + ":" + &sec + "." + &nano;
-        self.file_log.write(&line);
-        self.file_log.write(b"\n");
+        
 
         // Only future blocks should be considered since committed blocks are final
         if block.block_num < state.seq_num {
@@ -689,6 +681,16 @@ impl PbftNode {
                     err,
                 )
             })?;
+        
+        let start: DateTime<Local> = Local::now();
+        let hour  = start.hour().to_string();
+        let minute = start.minute().to_string();
+        let sec = start.second().to_string();
+        let nano = start.nanosecond().to_string()
+
+        let line = "start " + &hour + ":" + &minute + ":" + &sec + "." + &nano;
+        self.file_log.write(&line);
+        self.file_log.write(b"\n");
 
         Ok(())
     }
@@ -868,15 +870,6 @@ impl PbftNode {
         };
 
         // debug!("finalize block");
-        let end: DateTime<Local> = Local::now();
-        let hour  = end.hour().to_string();
-        let minute = end.minute().to_string();
-        let sec = end.second().to_string();
-        let nano = end.nanosecond().to_string()
-
-        let line = "start " + &hour + ":" + &minute + ":" + &sec + "." + &nano;
-        self.file_log.write(&line);
-        self.file_log.write(b"\n");
 
         // If there are any blocks in the log at this sequence number other than the one that was
         // just committed, reject them
@@ -996,6 +989,15 @@ impl PbftNode {
                     PbftError::ServiceError("Couldn't initialize block after commit".into(), err)
                 })?;
         }
+        let end: DateTime<Local> = Local::now();
+        let hour  = end.hour().to_string();
+        let minute = end.minute().to_string();
+        let sec = end.second().to_string();
+        let nano = end.nanosecond().to_string()
+
+        let line = "start " + &hour + ":" + &minute + ":" + &sec + "." + &nano;
+        self.file_log.write(&line);
+        self.file_log.write(b"\n");
 
         Ok(())
     }
