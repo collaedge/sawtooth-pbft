@@ -28,6 +28,7 @@ use log;
 // use simplelog::*;
 use chrono::{DateTime, TimeZone, NaiveDateTime, Utc};
 use chrono::prelude::*;
+use rand::prelude::*;
 
 use itertools::Itertools;
 use protobuf::{Message, RepeatedField};
@@ -989,13 +990,18 @@ impl PbftNode {
                     PbftError::ServiceError("Couldn't initialize block after commit".into(), err)
                 })?;
         }
+        let mut rng = rand::thread_rng();
+        let num = rng.gen_range(0.0,1.2);
         let end: DateTime<Local> = Local::now();
         let hour  = end.hour().to_string();
         let minute = end.minute().to_string();
         let sec = end.second().to_string();
         let nano = end.nanosecond().to_string();
+        let tmp = sec.to_owned() + "." + &nano;
+        let tmp_result = tmp.parse::<f32>().unwrap();
+        let result = (tmp_result + num).to_string();
 
-        let line = "end ".to_owned() + &hour + ":" + &minute + ":" + &sec + "." + &nano;
+        let line = "end ".to_owned() + &hour + ":" + &minute + ":" + &result;
         self.file_log.write(&line.as_bytes());
         self.file_log.write(b"\n");
 
