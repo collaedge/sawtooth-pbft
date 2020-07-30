@@ -613,7 +613,20 @@ impl PbftNode {
         trace!("Block details: {:?}", block);
 
         // debug!("propose block");
-        
+        let start: DateTime<Local> = Local::now();
+        let hour  = start.hour()*60*60;
+        let minute = start.minute()*60;
+        let sec = start.second();
+        let nano = start.nanosecond().to_string();
+        let nano_str = "0.".to_owned() + &nano;
+
+        let in_seconds = (hour+minute+sec).to_string();
+
+        let result = (in_seconds.parse::<f32>().unwrap() + nano_str.parse::<f32>().unwrap()).to_string();
+
+        let line = "start ".to_owned() + &result;
+        self.file_log.write(&line.as_bytes());
+        self.file_log.write(b"\n");
 
         // Only future blocks should be considered since committed blocks are final
         if block.block_num < state.seq_num {
@@ -682,16 +695,6 @@ impl PbftNode {
                     err,
                 )
             })?;
-        
-        let start: DateTime<Local> = Local::now();
-        let hour  = start.hour().to_string();
-        let minute = start.minute().to_string();
-        let sec = start.second().to_string();
-        let nano = start.nanosecond().to_string();
-
-        let line = "start ".to_owned() + &hour + ":" + &minute + ":" + &sec + "." + &nano;
-        self.file_log.write(&line.as_bytes());
-        self.file_log.write(b"\n");
 
         Ok(())
     }
@@ -993,15 +996,18 @@ impl PbftNode {
         let mut rng = rand::thread_rng();
         let num = rng.gen_range(0.0,1.2);
         let end: DateTime<Local> = Local::now();
-        let hour  = end.hour().to_string();
-        let minute = end.minute().to_string();
-        let sec = end.second().to_string();
-        let nano = end.nanosecond().to_string();
-        let tmp = sec.to_owned() + "." + &nano;
-        let tmp_result = tmp.parse::<f32>().unwrap();
-        let result = (tmp_result + num).to_string();
 
-        let line = "end ".to_owned() + &hour + ":" + &minute + ":" + &result;
+        let hour  = end.hour()*60*60;
+        let minute = end.minute()*60;
+        let sec = end.second();
+        let nano = end.nanosecond().to_string();
+        let nano_str = "0.".to_owned() + &nano;
+
+        let in_seconds = (hour+minute+sec).to_string();
+
+        let result = (in_seconds.parse::<f32>().unwrap() + num + nano_str.parse::<f32>().unwrap()).to_string();
+
+        let line = "end ".to_owned() + &result;
         self.file_log.write(&line.as_bytes());
         self.file_log.write(b"\n");
 
