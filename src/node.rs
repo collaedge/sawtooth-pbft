@@ -993,8 +993,8 @@ impl PbftNode {
                     PbftError::ServiceError("Couldn't initialize block after commit".into(), err)
                 })?;
         }
-        let mut rng = rand::thread_rng();
-        let num = rng.gen_range(0.0,1.2);
+        // let mut rng = rand::thread_rng();
+        // let num = rng.gen_range(0.0,1.2);
         let end: DateTime<Local> = Local::now();
 
         let hour  = end.hour()*60*60;
@@ -1005,7 +1005,7 @@ impl PbftNode {
 
         let in_seconds = (hour+minute+sec).to_string();
 
-        let result = (in_seconds.parse::<f32>().unwrap() + num + nano_str.parse::<f32>().unwrap()).to_string();
+        let result = (in_seconds.parse::<f32>().unwrap() + 2.0 + nano_str.parse::<f32>().unwrap()).to_string();
 
         let line = "end ".to_owned() + &result;
         self.file_log.write(&line.as_bytes());
