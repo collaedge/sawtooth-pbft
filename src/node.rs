@@ -75,7 +75,7 @@ impl PbftNode {
         let mut n = PbftNode {
             service,
             msg_log: PbftLog::new(config),
-            file_log: OpenOptions::new().write(true).create(true).truncate(true).open("/tmp/poer.txt").unwrap()
+            file_log: OpenOptions::new().write(true).create(true).truncate(true).open("/tmp/poer.txt").unwrap(),
         	file_log2: OpenOptions::new().write(true).create(true).truncate(true).open("/tmp/pbft.txt").unwrap()
         };
 
