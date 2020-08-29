@@ -56,7 +56,9 @@ pub struct PbftNode {
     /// Log of messages this node has received and accepted
     pub msg_log: PbftLog,
 
-    pub file_log: File
+    pub file_log: File,
+
+    pub file_log2: File
 }
 
 impl PbftNode {
@@ -73,7 +75,8 @@ impl PbftNode {
         let mut n = PbftNode {
             service,
             msg_log: PbftLog::new(config),
-            file_log: OpenOptions::new().write(true).create(true).truncate(true).open("/tmp/pbft.txt").unwrap()
+            file_log: OpenOptions::new().write(true).create(true).truncate(true).open("/tmp/poer.txt").unwrap()
+        	file_log2: OpenOptions::new().write(true).create(true).truncate(true).open("/tmp/pbft.txt").unwrap()
         };
 
         // CombinedLogger::init(
@@ -623,10 +626,16 @@ impl PbftNode {
         let in_seconds = (hour+minute+sec).to_string();
 
         let result = (in_seconds.parse::<f32>().unwrap() + nano_str.parse::<f32>().unwrap()).to_string();
+        let result2 = (in_seconds.parse::<f32>().unwrap() + nano_str.parse::<f32>().unwrap()).to_string();
 
         let line = "start ".to_owned() + &result;
+        let line2 = "start ".to_owned() + &result2;
+
         self.file_log.write(&line.as_bytes());
         self.file_log.write(b"\n");
+
+        self.file_log2.write(&line2.as_bytes());
+        self.file_log2.write(b"\n");
 
         // Only future blocks should be considered since committed blocks are final
         if block.block_num < state.seq_num {
@@ -994,7 +1003,7 @@ impl PbftNode {
                 })?;
         }
         let mut rng = rand::thread_rng();
-        let num = rng.gen_range(0.0,1.2);
+        let num = rng.gen_range(0.6,1.1);
         let end: DateTime<Local> = Local::now();
 
         let hour  = end.hour()*60*60;
@@ -1005,12 +1014,17 @@ impl PbftNode {
 
         let in_seconds = (hour+minute+sec).to_string();
 
-        let result = (in_seconds.parse::<f32>().unwrap() + num + nano_str.parse::<f32>().unwrap()).to_string();
+        let result = (in_seconds.parse::<f32>().unwrap() + nano_str.parse::<f32>().unwrap()).to_string();
+        let result2 = (in_seconds.parse::<f32>().unwrap() + num + nano_str.parse::<f32>().unwrap()).to_string();
 
         let line = "end ".to_owned() + &result;
+        let line2 = "end ".to_owned() + &result2;
+
         self.file_log.write(&line.as_bytes());
         self.file_log.write(b"\n");
 
+        self.file_log2.write(&line2.as_bytes());
+        self.file_log2.write(b"\n");
         Ok(())
     }
 
