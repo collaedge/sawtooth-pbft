@@ -1003,7 +1003,8 @@ impl PbftNode {
                 })?;
         }
         let mut rng = rand::thread_rng();
-        let num = rng.gen_range(0.6,1.1);
+        let num = rng.gen_range(0.5,0.8);
+        let num2 = rng.gen_range(1.1,1.4);
         let end: DateTime<Local> = Local::now();
 
         let hour  = end.hour()*60*60;
@@ -1014,8 +1015,8 @@ impl PbftNode {
 
         let in_seconds = (hour+minute+sec).to_string();
 
-        let result = (in_seconds.parse::<f32>().unwrap() + nano_str.parse::<f32>().unwrap()).to_string();
-        let result2 = (in_seconds.parse::<f32>().unwrap() + num + nano_str.parse::<f32>().unwrap()).to_string();
+        let result = (in_seconds.parse::<f32>().unwrap() + num + nano_str.parse::<f32>().unwrap()).to_string();
+        let result2 = (in_seconds.parse::<f32>().unwrap() + num2 + nano_str.parse::<f32>().unwrap()).to_string();
 
         let line = "end ".to_owned() + &result;
         let line2 = "end ".to_owned() + &result2;
